@@ -24,7 +24,6 @@ import android.widget.Toast;
 import com.example.lab6_20212591.databinding.FragmentLaboratorio7Binding;
 import com.squareup.picasso.Picasso;
 
-import java.util.UUID;
 
 public class Laboratorio7Fragment extends Fragment {
 
@@ -51,26 +50,51 @@ public class Laboratorio7Fragment extends Fragment {
 
         binding.btnSubir.setOnClickListener(v -> {
             if (imagenSeleccionadaUri != null) {
-                String nombreArchivo = UUID.randomUUID().toString() + ".jpg";
-                almacenamientoNube.guardarArchivo(imagenSeleccionadaUri, nombreArchivo, requireContext());
-                binding.etNombreArchivo.setText(nombreArchivo);
+                String nombreArchivo = binding.etNombreArchivo.getText().toString().trim();
+                if (nombreArchivo.isEmpty()) {
+                    Toast.makeText(getContext(), "Ingresa un nombre para el archivo", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!nombreArchivo.endsWith(".jpg")) {
+                    nombreArchivo += ".jpg"; // extensión por default :D
+                }
+                binding.progressBar.setVisibility(View.VISIBLE); //Barra de progreso :D
+                almacenamientoNube.guardarArchivo(imagenSeleccionadaUri, nombreArchivo, requireContext(), new AlmacenamientoNube.OnArchivoGuardadoListener() {
+                    @Override
+                    public void onArchivoGuardado(String url) {
+                        binding.progressBar.setVisibility(View.GONE); // Ocultar progreso
+                        Toast.makeText(getContext(), "Archivo subido: " + url, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onArchivoError(String error) {
+                        binding.progressBar.setVisibility(View.GONE); // Ocultar progreso
+                        Toast.makeText(getContext(), "Error al subir: " + error, Toast.LENGTH_SHORT).show();
+                    }
+                });
             } else {
                 Toast.makeText(getContext(), "Selecciona una imagen primero", Toast.LENGTH_SHORT).show();
             }
         });
 
         binding.btnDescargar.setOnClickListener(v -> {
-            String nombre = binding.etNombreArchivo.getText().toString().trim();
-            if (!nombre.isEmpty()) {
+            String input = binding.etNombreArchivo.getText().toString().trim();
+            if (!input.isEmpty()) {
+                final String nombre = input.endsWith(".jpg") ? input : input + ".jpg";
+
+                binding.progressBar.setVisibility(View.VISIBLE);
+
                 almacenamientoNube.obtenerArchivo(nombre, new AlmacenamientoNube.OnArchivoObtenidoListener() {
                     @Override
                     public void onArchivoObtenido(String url) {
                         mostrarImagen(url);
                         guardarImagenEnDescargas(url, nombre);
+                        binding.progressBar.setVisibility(View.GONE); // Ocultar progreso
                     }
 
                     @Override
                     public void onArchivoError(String error) {
+                        binding.progressBar.setVisibility(View.GONE);
                         Toast.makeText(getContext(), "Error: " + error, Toast.LENGTH_SHORT).show();
                     }
                 });

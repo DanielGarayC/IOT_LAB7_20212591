@@ -14,6 +14,10 @@
         android:id="@+id/navigation_resumen"
         android:icon="@drawable/chart_icon"
         android:title="Resumen" />
+    <item
+        android:id="@+id/navigation_laboratorio7"
+        android:icon="@drawable/cloud_icon"
+        android:title="Lab7" />
 
     <item
         android:id="@+id/navigation_cerrar_sesion"

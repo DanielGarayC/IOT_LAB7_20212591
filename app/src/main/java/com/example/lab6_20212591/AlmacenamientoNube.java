@@ -19,17 +19,15 @@ public class AlmacenamientoNube {
     }
 
     // Guardar archivo en Firebase Storage
-    public void guardarArchivo(Uri uriArchivo, String nombreArchivo, Context context) {
-        StorageReference archivoRef = storageRef.child("imagenes/" + nombreArchivo);
-        UploadTask uploadTask = archivoRef.putFile(uriArchivo);
-
-        uploadTask.addOnSuccessListener(taskSnapshot ->
-                archivoRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                    Toast.makeText(context, "Archivo subido: " + uri.toString(), Toast.LENGTH_LONG).show();
-                })
-        ).addOnFailureListener(e ->
-                Toast.makeText(context, "Error al subir: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-        );
+    public void guardarArchivo(Uri fileUri, String nombreArchivo, Context context, OnArchivoGuardadoListener listener) {
+        StorageReference ref = FirebaseStorage.getInstance().getReference().child("imagenes/" + nombreArchivo);
+        ref.putFile(fileUri)
+                .addOnSuccessListener(taskSnapshot -> ref.getDownloadUrl().addOnSuccessListener(uri -> {
+                    listener.onArchivoGuardado(uri.toString());
+                }))
+                .addOnFailureListener(e -> {
+                    listener.onArchivoError(e.getMessage());
+                });
     }
 
     // Obtener URL de archivo específico proveniente de Storage
@@ -38,6 +36,11 @@ public class AlmacenamientoNube {
         archivoRef.getDownloadUrl()
                 .addOnSuccessListener(uri -> listener.onArchivoObtenido(uri.toString()))
                 .addOnFailureListener(e -> listener.onArchivoError(e.getMessage()));
+    }
+
+    public interface OnArchivoGuardadoListener {
+        void onArchivoGuardado(String url);
+        void onArchivoError(String error);
     }
 
     public interface OnArchivoObtenidoListener {

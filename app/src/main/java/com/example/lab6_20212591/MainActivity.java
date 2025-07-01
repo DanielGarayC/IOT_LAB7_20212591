@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 R.id.navigation_movimientos_linea1,
                 R.id.navigation_movimientos_limapass,
                 R.id.navigation_resumen,
+                R.id.navigation_laboratorio7,
                 R.id.navigation_cerrar_sesion)
                 .build();
 

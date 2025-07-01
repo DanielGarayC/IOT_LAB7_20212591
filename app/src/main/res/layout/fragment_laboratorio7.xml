@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:padding="16dp">
 
     <LinearLayout
@@ -18,33 +20,48 @@
             android:layout_height="200dp"
             android:layout_marginBottom="16dp"
             android:scaleType="centerCrop"
-            android:src="@android:drawable/ic_menu_gallery" />
+
+            android:src="@drawable/photo_icon" />
 
         <EditText
             android:id="@+id/etNombreArchivo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre del archivo (ej. imagen.jpg)" />
+            android:hint="Nombre del archivo " />
 
         <Button
             android:id="@+id/btnSeleccionar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Seleccionar Imagen"
+            app:backgroundTint="#0E2194"
+            android:textColor="@color/white"
             android:layout_marginTop="12dp" />
 
         <Button
             android:id="@+id/btnSubir"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Subir a Firebase"
+            app:backgroundTint="#0E2194"
+            android:textColor="@color/white"
+            android:text="Subir"
             android:layout_marginTop="8dp" />
 
         <Button
             android:id="@+id/btnDescargar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:backgroundTint="#0E2194"
+            android:textColor="@color/white"
             android:text="Descargar y Mostrar"
             android:layout_marginTop="8dp" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"/>
     </LinearLayout>
 </ScrollView>
